@@ -1,0 +1,32 @@
+:root {
+    --brand-color: #013755;
+}
+
+.navbar {
+    background-color: var(--brand-color);
+}
+
+.btn-primary {
+    background-color: var(--brand-color);
+    border-color: var(--brand-color);
+}
+
+.children {
+    transition: height 250ms;
+    margin-left: 10px;
+    overflow: hidden;
+    height: 0;
+}
+
+.title {
+    cursor: pointer;
+}
+
+body.tree_drag .children > div, body.tree_drag .children {
+    min-height: 20px;
+    height: auto;
+}
+
+.tree.tree_drag {
+    background: aliceblue;
+}
