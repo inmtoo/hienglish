@@ -94,6 +94,7 @@ export class Tree {
         if (!this.childrenOverflow) return;
 
         this.childrenOverflow.classList.remove("opened");
+        this.title.classList.remove("opened");
         this.childrenOverflow.style.transition = "none";
         this.childrenOverflow.style.height = "0";
     }
@@ -102,8 +103,26 @@ export class Tree {
         if (!this.childrenOverflow) return;
 
         this.childrenOverflow.classList.add("opened");
+        this.title.classList.add("opened");
         this.childrenOverflow.style.transition = "none";
         this.childrenOverflow.style.height = "auto";
+    }
+
+    delete() {
+        this.childsTree = [];
+
+        if (this.parent) this.parent.onChildDelete(this);
+        else deleteRoot(this);
+
+        window.delete(this.element.dataset.id)
+            .then(() => {
+                this.element.remove();
+            });
+    }
+
+    onChildDelete(tree) {
+        const i = this.childsTree.findIndex(el => el === tree);
+        if (~i) this.childsTree.splice(i, 1);
     }
 
     search(name) {
@@ -111,7 +130,12 @@ export class Tree {
 
         let isFound = false;
         let childsFound = false;
-        if (this.name.includes(name)) isFound = true;
+        if (name && this.name.includes(name)) {
+            isFound = true;
+            this.title.classList.add("search");
+        } else {
+            this.title.classList.remove("search");
+        }
         this.childsTree.forEach(el => {
             if (el.search(name)) {
                 isFound = true;
@@ -128,16 +152,21 @@ export class Tree {
         return isFound;
     }
 
-    onClickTitle() {
+    onClickTitle(event) {
+        if (event.target.closest(".delete")) {
+            this.delete();
+            return;
+        }
         if (!this.childrenOverflow || this.childsTree.length === 0) return;
 
         this.childrenOverflow.classList.toggle("opened");
+        this.title.classList.toggle("opened");
         this.childrenOverflow.dispatchEvent(new CustomEvent("measure"));
 
     }
 
     setListeners() {
-        this.listeners.titleClick = () => this.onClickTitle()
+        this.listeners.titleClick = e => this.onClickTitle(e);
         this.title.addEventListener("click", this.listeners.titleClick);
         if (this.childrenOverflow) {
             this.listeners.measure = e => this.measureChildren(e);

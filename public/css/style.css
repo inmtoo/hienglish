@@ -20,13 +20,134 @@
 
 .title {
     cursor: pointer;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: solid 1px lightgrey;
+    display: inline-flex;
+    align-items: center;
 }
 
-body.tree_drag .children > div, body.tree_drag .children {
+.title.search {
+    background: var(--primary);
+    color: white;
+}
+
+.delete {
+    transition: width 250ms, padding-left 250ms;
+    padding-left: 0;
+    line-height: normal;
+    width: 0;
+    height: 25px;
+    overflow: hidden;
+}
+
+.delete img {
+    width: 100%;
+    padding-left: 3px;
+}
+
+.title:hover .delete {
+    width: 25px;
+}
+
+.arrow {
+    transition: transform 250ms;
+    padding: 3px;
+    line-height: normal;
+    transform: rotate(0deg);
+}
+
+.title.opened .arrow {
+    transform: rotate(90deg);
+}
+
+body.tree_drag .tree:not(.tree_drag):not(.draggable-mirror) .children > div, body.tree_drag .tree:not(.tree_drag):not(.draggable-mirror) .children {
     min-height: 20px;
-    height: auto;
+    height: auto !important;
+}
+
+.tree:is(.tree_drag, .draggable-mirror, .draggable--original) .children > div, .tree:is(.tree_drag, .draggable-mirror, .draggable--original) .children {
+    max-height: 0;
+    min-height: 0 !important;
 }
 
 .tree.tree_drag {
     background: aliceblue;
 }
+
+
+.preloader {
+    transition: visibility 250ms, opacity 250ms;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.preloader.opened {
+    visibility: visible;
+    opacity: 1;
+}
+
+.preloader > div {
+    width: 8vmax;
+    height: 8vmax;
+    border-right: 4px solid var(--primary);
+    border-radius: 100%;
+    animation: spinRight 800ms linear infinite;
+
+
+}
+
+.preloader > div:before, .preloader > div:after {
+    content: '';
+    width: 6vmax;
+    height: 6vmax;
+    display: block;
+    position: absolute;
+    top: calc(50% - 3vmax);
+    left: calc(50% - 3vmax);
+    border-left: 3px solid var(--primary);
+    border-radius: 100%;
+    animation: spinLeft 800ms linear infinite;
+}
+
+.preloader > div:after {
+    width: 4vmax;
+    height: 4vmax;
+    top: calc(50% - 2vmax);
+    left: calc(50% - 2vmax);
+    border: 0;
+    border-right: 2px solid var(--primary);
+    animation: none;
+}
+
+@keyframes spinLeft {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(720deg);
+    }
+}
+
+@keyframes spinRight {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+

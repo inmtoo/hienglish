@@ -31,6 +31,26 @@ return [
                     ],
                 ],
             ],
+            'delete' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/delete',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action' => 'delete',
+                    ],
+                ],
+            ],
+            'update' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/update',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action' => 'update',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [

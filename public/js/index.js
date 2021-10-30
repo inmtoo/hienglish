@@ -3,7 +3,8 @@ import {Tree} from "./Tree.js";
 const elements = {
     tree: document.querySelectorAll("#tree_list  > .tree"),
     search: document.getElementById("search"),
-    generateButton: document.getElementById("generate")
+    generateButton: document.getElementById("generate"),
+    preloader: document.querySelector(".preloader")
 };
 
 /**
@@ -15,8 +16,13 @@ const elements = {
  */
 function sendRequest(method, url, data = null) {
     return new Promise(resolve => {
+        elements.preloader.classList.add("opened");
+
         const xhr = new XMLHttpRequest();
-        xhr.onload = () => resolve(xhr.responseText);
+        xhr.onload = () => {
+            elements.preloader.classList.remove("opened");
+            resolve(xhr.responseText);
+        };
         xhr.open(method, url);
         xhr.send(data);
     });
@@ -26,7 +32,7 @@ function sendRequest(method, url, data = null) {
 elements.generateButton.addEventListener("click", function () {
     sendRequest("GET", "/generate")
         .then(() => {
-
+            location.reload();
         });
 });
 
@@ -35,6 +41,19 @@ elements.generateButton.addEventListener("click", function () {
  * @type {Tree[]}
  */
 let treeArr = [];
+
+
+window.deleteRoot = root => {
+    const i = treeArr.findIndex(el => el === root);
+    if (~i) treeArr.splice(i, 1);
+};
+
+window.delete = elementId => {
+    return sendRequest("GET", "/delete?id=" + elementId)
+        .then(() => {
+
+        });
+};
 
 elements.tree.forEach(el => {
     treeArr.push(new Tree(el));
@@ -63,11 +82,17 @@ const sortable = new Draggable.Sortable(document.querySelectorAll(".children > d
     delay: 200
 });
 
-sortable.on('sortable:sorted', function () {
+sortable.on('drag:stop', function (event) {
     treeArr.forEach(el => el.removeListeners());
     treeArr = [];
     elements.tree = document.querySelectorAll("#tree_list  > .tree");
     elements.tree.forEach(el => {
         treeArr.push(new Tree(el));
     });
+
+    const current = event.source;
+    const tree = current.parentElement.closest(".tree");
+    const parentId = tree ? tree.dataset.id : 0;
+
+    sendRequest("GET", `/update?id=${current.dataset.id}&parent_id=${parentId}`);
 });

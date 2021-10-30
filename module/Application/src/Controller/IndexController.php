@@ -62,6 +62,35 @@ class IndexController extends AbstractActionController
         return $this->text[$random];
     }
 
+    private function deleteElement($elementId) {
+
+        $element = $this->db->getRepository(Element::class)->find($elementId);
+        if (!$element) return;
+
+        $this->db->remove($element);
+        $this->db->flush();
+
+        /**
+         * @var $children Element[]
+         */
+        $children = $this->db->getRepository(Element::class)->findBy(['parent_id' => $elementId]);
+        foreach ($children as $child) {
+            $this->deleteElement($child->getId());
+        }
+
+    }
+
+    public function deleteAction() {
+        $id = $_GET['id'];
+        if (empty($id)) return;
+
+
+        $this->deleteElement($id);
+        echo 1;
+
+        exit;
+    }
+
     private function generateElement($parentId) {
 
 
@@ -97,9 +126,9 @@ class IndexController extends AbstractActionController
         $this->text = array_map(function ($word) {
             return ucfirst(trim(str_replace(['.', ','], '', $word)));
         }, $text);
-        $this->text = array_filter($this->text, function ($word) {
+        $this->text = array_values(array_filter($this->text, function ($word) {
             return mb_strlen($word, 'UTF-8') >= 3;
-        });
+        }));
 
 
         $rootElement = new Element();
@@ -116,6 +145,23 @@ class IndexController extends AbstractActionController
             $this->generateElement($rootId);
         }
 
+        exit;
+    }
+
+    public function updateAction() {
+        $id = $_GET['id'];
+        $parentId = $_GET['parent_id'];
+
+        /**
+         * @var $element Element
+         */
+        $element = $this->db->getRepository(Element::class)->find($id);
+        if (!$element) return;
+
+        $element->setParentId($parentId);
+        $this->db->flush();
+
+        echo 1;
         exit;
     }
 
