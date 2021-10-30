@@ -129,7 +129,7 @@ export class Tree {
     }
 
     onClickTitle() {
-        if (!this.childrenOverflow) return;
+        if (!this.childrenOverflow || this.childsTree.length === 0) return;
 
         this.childrenOverflow.classList.toggle("opened");
         this.childrenOverflow.dispatchEvent(new CustomEvent("measure"));

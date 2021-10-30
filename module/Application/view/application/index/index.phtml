@@ -1,65 +1,100 @@
+<?php
+
+function renderElement($element) {
+    $html = '<div class="tree">
+                <div class="title">' . $element['name'] . '</div>
+                <div class="children"><div>';
+
+    foreach ($element['children'] as $child) {
+        $html .= renderElement($child);
+    }
+
+    $html .= '</div></div>
+</div>';
+
+    return $html;
+}
+
+?>
+<button class="btn btn-success" id="generate" type="button">Сгенерировать</button>
 <div>
     <input class="form-control" id="search">
 </div>
 <div id="tree_list">
-    <div class="tree">
-        <div class="title">Title</div>
-        <div class="children">
+    <?php
+    foreach ($this->elements as $element) {
+        echo renderElement($element);
+    }
+    ?>
 
-            <div>
-
-                <div class="tree">
-                    <div class="title">Title1</div>
-                    <div class="children">
-
-                        <div>
-                            <div class="tree">
-                                <div class="title">Title2</div>
-                                <div class="children"><div></div></div>
-                            </div>
-                            <div class="tree">
-                                <div class="title">Title2</div>
-                                <div class="children">
-
-                                    <div>
-                                        <div class="tree">
-                                            <div class="title">Title2</div>
-                                            <div class="children"><div></div></div>
-                                        </div>
-                                        <div class="tree">
-                                            <div class="title">Title2</div>
-                                            <div class="children"><div></div></div>
-                                        </div>
-                                        <div class="tree">
-                                            <div class="title">Title2</div>
-                                            <div class="children"><div></div></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="tree">
-                    <div class="title">Title1</div>
-                    <div class="children">
-
-                        <div>
-                            <div class="tree">
-                                <div class="title">Title2</div>
-                                <div class="children"><div></div></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
+<!--    <div class="tree">-->
+<!--        <div class="title">Title</div>-->
+<!--        <div class="children">-->
+<!---->
+<!--            <div>-->
+<!---->
+<!--                <div class="tree">-->
+<!--                    <div class="title">Title1</div>-->
+<!--                    <div class="children">-->
+<!---->
+<!--                        <div>-->
+<!--                            <div class="tree">-->
+<!--                                <div class="title">Title2</div>-->
+<!--                                <div class="children">-->
+<!--                                    <div></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="tree">-->
+<!--                                <div class="title">Title2</div>-->
+<!--                                <div class="children">-->
+<!---->
+<!--                                    <div>-->
+<!--                                        <div class="tree">-->
+<!--                                            <div class="title">Title2</div>-->
+<!--                                            <div class="children">-->
+<!--                                                <div></div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="tree">-->
+<!--                                            <div class="title">Title2</div>-->
+<!--                                            <div class="children">-->
+<!--                                                <div></div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="tree">-->
+<!--                                            <div class="title">Title2</div>-->
+<!--                                            <div class="children">-->
+<!--                                                <div></div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!---->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="tree">-->
+<!--                    <div class="title">Title1</div>-->
+<!--                    <div class="children">-->
+<!---->
+<!--                        <div>-->
+<!--                            <div class="tree">-->
+<!--                                <div class="title">Title2</div>-->
+<!--                                <div class="children">-->
+<!--                                    <div></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                    </div>-->
+<!--                </div>-->
+<!---->
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!--    </div>-->
 
 </div>
 

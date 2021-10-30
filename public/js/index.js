@@ -2,8 +2,33 @@ import {Tree} from "./Tree.js";
 
 const elements = {
     tree: document.querySelectorAll("#tree_list  > .tree"),
-    search: document.getElementById("search")
+    search: document.getElementById("search"),
+    generateButton: document.getElementById("generate")
 };
+
+/**
+ *
+ * @param method {"POST"|"GET"}
+ * @param url {string}
+ * @param data {FormData|URLSearchParams|string|null}
+ * @return Promise<string>
+ */
+function sendRequest(method, url, data = null) {
+    return new Promise(resolve => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => resolve(xhr.responseText);
+        xhr.open(method, url);
+        xhr.send(data);
+    });
+}
+
+
+elements.generateButton.addEventListener("click", function () {
+    sendRequest("GET", "/generate")
+        .then(() => {
+
+        });
+});
 
 /**
  *
@@ -13,6 +38,11 @@ let treeArr = [];
 
 elements.tree.forEach(el => {
     treeArr.push(new Tree(el));
+});
+
+treeArr.forEach(el => {
+    el.show();
+    el.childsTree.forEach(el => el.show());
 });
 
 elements.search.addEventListener("input", function () {
